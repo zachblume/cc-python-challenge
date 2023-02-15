@@ -27,7 +27,7 @@ class ModelController(ControllerInterface):
                     search_scope += " "
                 search_scope += request.get(i)
 
-            answer = self.refactor(
+            answer = self.scoped_search(
                 search_scope, commodity)
             if answer:
                 temp_model, scope_match = answer
@@ -42,7 +42,7 @@ class ModelController(ControllerInterface):
 
         return f'{answer_scope} emissions intensity for {commodity} is {model.emission_intensity}'
 
-    def refactor(self, search_scope, commodity):
+    def scoped_search(self, search_scope, commodity):
         # Initialize a list with falsy values of same length as possible scopes
         matches = [None] * 3
 
