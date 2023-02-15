@@ -20,9 +20,10 @@ class ModelController(ControllerInterface):
             # Get the specified search scope
             search_scope = request.get(1)
 
-            temp_model, scope_match = self.refactor(
+            answer = self.refactor(
                 search_scope, commodity)
-            if temp_model:
+            if answer:
+                temp_model, scope_match = answer
                 model = temp_model
                 answer_scope = scope_match
 
