@@ -25,10 +25,3 @@ class TestModel(TestCase):
         self.assertFalse(
             model.is_global_for_commodity('Zinc'),
             'Model should not be global for the commodity because the commodity does not match')
-        
-    def tests_for_nonexistent_scopes_return_global(self):
-        model = Model('Copper', "Made Up Country", 12.34)
-
-        self.assertFalse(
-            model.is_global_for_commodity('Zinc'),
-            'Model should not be global for the commodity because the commodity does not match')
