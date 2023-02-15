@@ -18,7 +18,9 @@ class ModelController(ControllerInterface):
         # If there is scope, and it's discoverable, return a scoped answer
         if (len(request.params) > 1):
             # Get the specified search scope
-            search_scope = request.get(1)
+            search_scope = ""
+            for i in range(1, len(request.params)):
+                search_scope += request.get(i)
 
             answer = self.refactor(
                 search_scope, commodity)
