@@ -25,3 +25,17 @@ class TestModel(TestCase):
         self.assertFalse(
             model.is_global_for_commodity('Zinc'),
             'Model should not be global for the commodity because the commodity does not match')
+
+    def test_scope_and_commodity_match(self):
+        model = Model('Copper', "India", 12.34)
+
+        self.assertTrue(
+            model.is_for_given_scope_and_commodity('India', 0, 'Copper'),
+            'Model should match')
+
+    def scope_and_commodity_definition_shouldnt_match_global_search(self):
+        model = Model('Copper', "India", 12.34)
+
+        self.assertFalse(
+            model.is_global_for_commodity('Copper'),
+            'Global match shouldnt match a scoped definition')
