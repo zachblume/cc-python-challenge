@@ -23,7 +23,6 @@ class ModelController(ControllerInterface):
                 if i > 1:
                     search_scope += " "
                 search_scope += request.get(i)
-            print(search_scope)
 
             answer = self.refactor(
                 search_scope, commodity)
