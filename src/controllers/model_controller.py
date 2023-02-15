@@ -19,6 +19,9 @@ class ModelController(ControllerInterface):
         if (len(request.params) > 1):
             # Get the specified search scope
             search_scope = ""
+            # This rebuilds the space-concatenated string
+            # from the request in case of searches like "model search South America"
+            # where South America is really a single param
             for i in range(1, len(request.params)):
                 if i > 1:
                     search_scope += " "
