@@ -1,3 +1,39 @@
+# Solution thoughts
+Instructions: you can run the unit tests in the same below method, and you can run searches with:
+
+python3 src/main.py model COMMODITY SCOPE ...
+
+The scope interpretation is generic, so:
+model Zinc 'North America'
+model Zinc North America
+...both work!
+
+My solution approach was pretty simple:
+-in tests/domain/test_model.py
+You'll find two new unit tests
+
+-in src/controllers/model_controller.py
+You'll find (1) a refactored search method, (2) a scoped_search() submethod to increase readability
+
+-in src/domain/model_repository.py
+You'll find a new method, find_by_scope_and_commodity()
+
+-in src/domain/model.py
+You'll find a method is_for_given_scope_and_commodity()
+
+In essence, this (first) approach minimizes changes to the overall application structure and codebase and potential edge cases.
+
+(1) The updated search() method delegates a search for a scoped match to a submethod. If none is returned, a global match proceeds normally.
+(2) The scoped_search() method moves through the asset repository and checks for scope string matches. 
+(3) It then moves through the scope hierarchy for that match (from name to country to continent) and returns the first (most specific) matching models.
+(4) If there isn't a match for each asset-scope_level combination, it percolates outwards until hitting global where it returns None and triggers the normal global search in search()
+
+This is a quick working solution. My next steps would be:
+-To write end2end tests instead of unit tests for further development changes
+-To hash the scopes as an index and persist that to prevent the O(n)+ looping that it going on in this solution right now
+-Add a file or db cache so each instantiation of the CLI doesn't generate the repositories and indexes at runtime
+
+
 # Software Engineer: Take home coding challenge
 
 Carbon Chain is building a simple application to search its database of emission models. Attached is our first pass on
