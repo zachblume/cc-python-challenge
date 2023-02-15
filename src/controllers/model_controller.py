@@ -20,7 +20,10 @@ class ModelController(ControllerInterface):
             # Get the specified search scope
             search_scope = ""
             for i in range(1, len(request.params)):
+                if i > 1:
+                    search_scope += " "
                 search_scope += request.get(i)
+            print(search_scope)
 
             answer = self.refactor(
                 search_scope, commodity)
