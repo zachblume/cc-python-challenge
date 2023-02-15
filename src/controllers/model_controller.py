@@ -11,6 +11,10 @@ class ModelController(ControllerInterface):
         self.model_repository = model_repository
 
     def search(self, request: Request) -> str:
+        """
+        This method executes the scoped_search method if it was passed as a scope argument,
+        and otherwise returns a global search (it also returns a global match if there is no scope match)
+        """
         commodity = request.get(0)
         search_scope = "Global"
         model = False
@@ -27,11 +31,19 @@ class ModelController(ControllerInterface):
                     search_scope += " "
                 search_scope += request.get(i)
 
-            answer = self.scoped_search(
+            # Find any possible scoped match
+            scoped_answer = self.scoped_search(
                 search_scope, commodity)
-            if answer:
+
+            # If there is one...
+            if scoped_answer:
+                # Destructure the answer
                 temp_model, scope_match = answer
+
+                # Replace the model for answer
                 model = temp_model
+
+                # Defined the scope for the answer
                 answer_scope = scope_match
 
         # If there is no scope, or the scope is undiscoverable and model was never updated,
@@ -43,6 +55,12 @@ class ModelController(ControllerInterface):
         return f'{answer_scope} emissions intensity for {commodity} is {model.emission_intensity}'
 
     def scoped_search(self, search_scope, commodity):
+        """
+        This method moves through the asset repository and checks for scope matches. 
+        It then moves through the scope hierarchy for that match and returns the first (most specific) matching models.
+        If there isn't a match for that asset-scope_level combination, it percolates outwards until hitting global where it returns None
+        """
+
         # Initialize a list with falsy values of same length as possible scopes
         matches = [None] * 3
 
@@ -75,3 +93,5 @@ class ModelController(ControllerInterface):
                         scope, scope_level, commodity)
                     if (temp_model):
                         return temp_model, scope
+
+        return None
