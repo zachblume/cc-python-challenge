@@ -38,7 +38,7 @@ class ModelController(ControllerInterface):
             # If there is one...
             if scoped_answer:
                 # Destructure the answer
-                temp_model, scope_match = answer
+                temp_model, scope_match = scoped_answer
 
                 # Replace the model for answer
                 model = temp_model
